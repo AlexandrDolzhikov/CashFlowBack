@@ -15,7 +15,8 @@ class User extends Authenticatable implements JWTSubject
      * @var array
      */
     protected $fillable = [
-        'login', 'email', 'password',
+        'login', 'email', 'password', 'last_name', 'first_name', 'age', 'status', 
+        'role', 'about_me', 'budget', 'profession', 'avatar', 'excerption', 'city'
     ];
 
     /**
@@ -48,25 +49,23 @@ class User extends Authenticatable implements JWTSubject
     }
 
     /**
-     * Метод проверяет к какому типу относится операция. Доход либо расход. Этот метод работает только для таблицы со всеми операциями.
-     * Потому что здесь дается информация - это либо расход, либо доход. А у нас есть много категорий операций.
+     * Метод проверяет к какому типу относится операция. Доход либо расход.
      */
-    public function getCategoryLabel($operations) {
+    public static function getCategoryLabel($operation) {
 
-        foreach($operations as $operation) {
+        $result = false;
+        $category = OperationType::where('id', '=', $operation->type_operation_id)->first();
 
-            $category = OperationType::where('id', '=', $operation->type_operation_id)->first();
+        if(1 == $category['is_income']) {
 
-            if(1 == $category['is_income']) {
+            $operation->type_operation_id = 1;
+            $result = true;
+        } else {
 
-                $operation = $operation->type_operation_id = 1;
-            } else {
-
-                $operation = $operation->type_operation_id = 0;
-            }
-
+            $operation->type_operation_id = 0;
+            $result = false;
         }
 
-        return $operations;
+        return $result;
     }
 }

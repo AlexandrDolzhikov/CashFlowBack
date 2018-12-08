@@ -22,13 +22,13 @@ class CreateUsersTable extends Migration
             $table->string('last_name');
             $table->string('first_name');
             $table->integer('age');
-            $table->boolean('status');
-            $table->string('role');
+            $table->boolean('status')->nullable(); // Online/offline
+            $table->string('role')->default('Student');
             $table->longText('about_me');
             $table->integer('budget');
             $table->string('profession');
-            $table->string('avatar');
-            $table->string('excerption');
+            $table->string('avatar')->nullable();
+            $table->string('excerption')->nullable();
             $table->string('city');
             $table->rememberToken();
             $table->timestamps();

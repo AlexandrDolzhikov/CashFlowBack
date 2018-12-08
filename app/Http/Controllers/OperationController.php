@@ -83,7 +83,7 @@ class OperationController extends Controller
      */
     public function update(Request $request, Operation $operation, $id)
     {
-        $operation = \App\Operation::where('id', '=', $id)->first();
+        $operation = Operation::where('id', '=', $id)->first();
         $operation->update($request->all());
 
         return response()->json([
@@ -99,7 +99,7 @@ class OperationController extends Controller
      */
     public function destroy(Operation $operation, $id)
     {
-        $operation = \App\Operation::where('id', '=', $id)->first();
+        $operation = Operation::where('id', '=', $id)->first();
         $operation->delete();
 
         return response()->json([

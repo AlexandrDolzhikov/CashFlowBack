@@ -85,11 +85,14 @@ class UserController extends Controller
 
         $user = User::where('id', '=', $id)->first();
 
-        $operations = $user->getCategoryLabel($user->operations);
+        foreach($user->operations as $operation) {
+
+            User::getCategoryLabel($operation);
+        }
 
         return response()->json([
             'operations' => $user->operations
-        ]);
+        ], 200);
     }
 
     public function getCategoryOperations(Request $request, $id) {
@@ -99,6 +102,35 @@ class UserController extends Controller
 
         return response()->json([
             'type_operations' => $type_operations
-        ]);
+        ], 200);
+    }
+
+    public function getTheUserInfo(Request $request) {
+
+        $user = User::where('id', '=', $request->get('id'))->first();
+
+        return response()->json([
+            'user' => $user
+        ], 200);
+    }
+
+    public function updateTheUserInfo(Request $request) {
+
+        $user = User::where('id', '=', $request->get('id'))->first();
+        $user->update($request->all());
+
+        return response()->json([
+            'user' => $user
+        ], 200);
+    }
+
+    public function deleteTheUser(Request $request) {
+
+        $user = User::where('id', '=', $request->get('id'))->first();
+        $user->delete();
+
+        return response()->json([
+            'user' => $user
+        ], 200);
     }
 }
