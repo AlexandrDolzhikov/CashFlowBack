@@ -24,12 +24,7 @@ class OperationTypeController extends Controller
      */
     public function create(Request $request)
     {
-        $operationType = new OperationType;
-        $operationType->title     = $request->get('title');
-        $operationType->is_income = $request->get('is_income');
-        $operationType->details   = $request->get('details');
-        $operationType->author_id = $request->get('author_id');
-        $operationType->save();
+        $operationType = OperationType::create($request->all());
 
         return response()->json([
             "operationType" => $operationType
@@ -84,7 +79,12 @@ class OperationTypeController extends Controller
      */
     public function update(Request $request, OperationType $operationType)
     {
-        //
+        $category = OperationType::where('id', '=', $request->get('id'));
+        $category->update($request->all());
+
+        return response()->json([
+            'category' => $category
+        ], 200);
     }
 
     /**

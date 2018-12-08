@@ -46,4 +46,27 @@ class User extends Authenticatable implements JWTSubject
     {
         return $this->hasMany('App\OperationType', 'author_id', 'id');
     }
+
+    /**
+     * Метод проверяет к какому типу относится операция. Доход либо расход. Этот метод работает только для таблицы со всеми операциями.
+     * Потому что здесь дается информация - это либо расход, либо доход. А у нас есть много категорий операций.
+     */
+    public function getCategoryLabel($operations) {
+
+        foreach($operations as $operation) {
+
+            $category = OperationType::where('id', '=', $operation->type_operation_id)->first();
+
+            if(1 == $category['is_income']) {
+
+                $operation = $operation->type_operation_id = 1;
+            } else {
+
+                $operation = $operation->type_operation_id = 0;
+            }
+
+        }
+
+        return $operations;
+    }
 }

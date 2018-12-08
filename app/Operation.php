@@ -18,5 +18,5 @@ class Operation extends Model
      *
      * @var array
      */
-    protected $fillable = ['name', 'operation_date', 'balance', 'details', 'type_operation_id', 'author_id'];
+    protected $fillable = ['name', 'operation_date', 'balance', 'details', 'type_operation_id', 'author_id', 'sum'];
 }

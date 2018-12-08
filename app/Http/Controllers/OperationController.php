@@ -24,14 +24,7 @@ class OperationController extends Controller
      */
     public function create(Request $request)
     {
-        $operation = new Operation;
-        $operation->operation_date    = $request->get('date');
-        $operation->balance           = $request->get('remainder');
-        $operation->sum               = $request->get('sum');
-        $operation->details           = $request->get('description');
-        $operation->type_operation_id = $request->get('type');
-        $operation->author_id         = $request->get('author_id');
-        $operation->save();
+        $operation = Operation::create($request->all());
 
         return response()->json([
             "operation" => $operation
@@ -57,9 +50,15 @@ class OperationController extends Controller
      */
     public function show(Operation $operation, $id)
     {
-        $operation = \App\Operation::where('id', '=', $id)->first();
+        $operation = Operation::where('id', '=', $id)->first();
+        $category  = \App\OperationType::where('id', '=', $operation->type_operation_id)->first();
+        unset($operation->type_operation_id);
+        
+        $operation->category = $category;
+
+        \Log::info($operation);
+
         return response()->json([
-            'id' => $id,
             'operation' => $operation
         ], 200);
     }
@@ -85,15 +84,8 @@ class OperationController extends Controller
     public function update(Request $request, Operation $operation, $id)
     {
         $operation = \App\Operation::where('id', '=', $id)->first();
-        
-        $operation->operation_date    = $request->get('date');
-        $operation->balance           = $request->get('remainder');
-        $operation->sum               = $request->get('sum');
-        $operation->details           = $request->get('description');
-        $operation->type_operation_id = $request->get('type');
-        $operation->author_id         = $request->get('author_id');
-        
-        $operation->save();
+        $operation->update($request->all());
+
         return response()->json([
             'operation' => $operation
         ], 200);
@@ -109,6 +101,7 @@ class OperationController extends Controller
     {
         $operation = \App\Operation::where('id', '=', $id)->first();
         $operation->delete();
+
         return response()->json([
             'operation' => $operation
         ], 200);
